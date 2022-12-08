@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model peserta_pemilihan {
+  id      Int     @id @default(autoincrement())
+  nis     Int     @unique
+  nama    String  @db.VarChar(100)
+  kelas   String  @db.VarChar(30)
+  isVoted Boolean @default(false)
+  voteNo  Int?
+}
+
+model kandidat_ketua {
+  id             Int              @id @default(autoincrement())
+  nis            Int              @unique
+  nama           String           @db.VarChar(100)
+  kelas          String           @db.VarChar(30)
+  noUrut         Int
+  kandidat_wakil kandidat_wakil[]
+}
+
+model kandidat_wakil {
+  id               Int            @id @default(autoincrement())
+  nis              Int            @unique
+  nama             String         @db.VarChar(100)
+  kelas            String         @db.VarChar(30)
+  ketua            kandidat_ketua @relation(fields: [kandidat_ketuaId], references: [id])
+  kandidat_ketuaId Int
+}
