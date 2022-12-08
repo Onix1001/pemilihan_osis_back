@@ -1,15 +1,11 @@
 import Express from "express";
-import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
 const app = Express();
+import router from "./router/index.js";
 
 const port = 8100;
 
-app.get("/", async (req, res) => {
-  const peserta = await prisma.peserta_pemilihan.findMany();
-  res.json(peserta);
-});
+app.use(router);
 
 app.listen(port, () => {
   console.log("Listening on port " + port);
